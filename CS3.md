@@ -37,6 +37,7 @@ typedef struct servant // Typedef agar dapat langsung dipanggil...
     int rarity;
 } Servant; // ...sebagai servant
 ```
+Dengan menggunakan struct begini, setiap data jadi "dipaketkan" dan nggak harus diurus terpisah-pisah.
 
 ## Nomor 1
 
