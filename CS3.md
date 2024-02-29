@@ -39,9 +39,10 @@ typedef struct servant // Typedef agar dapat langsung dipanggil...
 ```
 Dalam kasus ini untuk string digunakan array char dengan size default 30 untuk memudahkan.
 
-##Nomor 1
+## Nomor 1
 
 Case Study ini meminta pengurutan (sorting) dan karena google boleh digunakan (makasih aslab tercinta), berikut algoritma sorting dari GeeksforGeeks. [Bubblesort](https://youtu.be/xli_FI7CuzA?si=xyZX3mUe_N2o3ANe) digunakan karena algoritmanya sederhana dan pada kasus ini karena jumlah data sedikit, kecepatan algoritma tidak terlalu penting. Algoritma Bubble Sort sendiri tidak akan dibahas di sini.
+
 ![Bubble sort](https://upload.wikimedia.org/wikipedia/commons/5/54/Sorting_bubblesort_anim.gif)
 
 ```c
@@ -103,7 +104,7 @@ if (arr[j] > arr[j + 1]) {
 ```
 karena arr bertipe Servant, komputernya kebingungan bagian mana yang dibandingkan dari Servant, kita belum ngasih tahu secara spesifik apa yang mau dibandingkan.
 
-Solusinya sederhana, jika kita ingin membandingkan raritynya maka tinggal diberi .rarity untuk membandingkan data rarity di dalam struct tersebut.
+Solusinya sederhana, jika kita ingin membandingkan rarity-nya maka tinggal diberi .rarity untuk membandingkan data rarity di dalam struct tersebut.
 ```c
 ...
 if (arr[j].rarity > arr[j + 1].rarity) // Jika array pada j lebih besar dari j + 1,
@@ -114,7 +115,8 @@ if (arr[j].rarity > arr[j + 1].rarity) // Jika array pada j lebih besar dari j +
 ```
 Hampir semua algoritma sorting memiliki satu bagian dari kodenya yang membandingkan konten array yang disortir, pada bagian itu hubungan data dalam array mempengaruhi proses yang dijalankan algoritma selanjutnya (seperti swapping).
 
-Dalam kasus bubble sort ini, kita bisa membayangkan bahwa jika data pada posisi j lebih besar dari j + 1, kita tukar. Hal ini dilakukan karena data pada j lebih besar dari j + 1 bukanlah posisi yang benar bagi sebuah array terurut dari kecil ke terbesar. 
+Dalam kasus bubble sort ini, kita bisa membayangkan bahwa jika rarity arr[j] lebih besar dari rarity arr[j + 1], maka kita tukar. 
+Hal ini dilakukan karena jika data pada j lebih besar dari j + 1, urutanya belum dari terkecil ke terbesar. 
 Karena kita ingin mengurutkan rarity servant dari yang terbesar ke terkecil, maka tinggal kita balik saja tandanya sehingga keseluruhan kode menjadi
 ```c
 #include <stdio.h>
@@ -194,8 +196,8 @@ int main()
 
 Hore, nomor 1 sudah selesai 🎉.
 
-##Nomor 2
-Nomor 2 hanyalah ekstensi dari nomor 1, namun kali ini jika ada 2 Servant dengan rarity yang sama, diurutkan lagi berdasarkan namanya.
+## Nomor 2
+Nomor 2 sama saja dengan nomor 1, namun kali ini jika ada 2 Servant dengan rarity yang sama, diurutkan lagi berdasarkan namanya.
 Untuk mengurutkan nama, sebuah string, kita dapat menggunakan fungsi strcmp(char *a, char *b) dari library <string.h>.
 ```c
 strcmp(const char *str1, const char *str2);
@@ -207,12 +209,15 @@ strcmp menerima 2 buah string (char array) dan akan menghasilkan output:
 < 0 (negatif)    jika str1 lebih "kecil" dari str2
 ```
 
-maka dengan menggunakan pada bagian perbandingan di nomor 1
+maka dengan menggunakan fungsi tersebut di porsi perbandingan dari nomor 1
 ```c
 ...
-if (strcmp(arr[j].name, arr[j + 1].name) > 0) // Jika nama pada arr[j] lebih besar dari nama pada arr[j + 1]
+for (j = 0; j < n - i - 1; j++) 
 {
-    swap(&arr[j], &arr[j + 1]); // Tukar karena kita ingin terurut dari paling "kecil" (alfabetikal)
+    if (strcmp(arr[j].name, arr[j + 1].name) > 0) // Jika nama pada arr[j] lebih besar dari nama pada arr[j + 1]
+    {
+        swap(&arr[j], &arr[j + 1]); // Tukar karena kita ingin terurut dari paling "kecil" (alfabetikal)
+    }
 }
 ...
 ```
@@ -273,15 +278,17 @@ void bubbleSort(Servant *arr, int n)
     }
 }
 ```
-fungsi_perbandingan() mengembalikan 0 jika kondisi urutan array belum sesuai keinginan. Bahasa lebih manusiawinya begini:
+hmm, ya , sangat modular, Pak Dodi approve ini (mungkin).
+
+fungsi_perbandingan() akan mengembalikan 0 jika kondisi urutan array belum sesuai keinginan. Bahasa lebih manusiawinya begini:
 ```c
 int fungsi_perbandingan(Servant a, Servant b)
 {
     if (a.rarity == b.rarity) // Jika rarity sama
     {
-        if (strcmp(a.name, b.name) < 0);
+        if (strcmp(a.name, b.name) < 0) // Bandingkan berdasarkan nama
         {
-            return 1;
+            return 1; // Kembalikan 1 jika sudah sesuai
         } 
         else
         {
@@ -292,7 +299,7 @@ int fungsi_perbandingan(Servant a, Servant b)
     {
         if (a.rarity > b.rarity)
         {
-            return 1;
+            return 1; // Kembalikan 1 jika sudah sesuai
         }
         else
         {
