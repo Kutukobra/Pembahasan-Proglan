@@ -28,7 +28,7 @@ Setelah selesai membantu Romani Archaman, anda kembali ke kantor untuk melanjutk
 -------------------------
 
 #Pembahasan:
-Diketahui bahwa dalam soal ini ada klasifikasi karakter wibunya Gio yang teridiri atas integer rarity, string nama, dan string class. Untuk memudahkan proses, sebuah struct dapat digunakan sebagai tipe data Servant
+Diketahui bahwa dalam soal ini ada klasifikasi karakter wibu yang terdiri atas integer rarity, string nama, dan string class. Untuk memudahkan proses, sebuah struct dapat digunakan sebagai tipe data Servant.
 ```c
 typedef struct servant // Typedef agar dapat langsung dipanggil...
 {
@@ -39,8 +39,10 @@ typedef struct servant // Typedef agar dapat langsung dipanggil...
 ```
 Dalam kasus ini untuk string digunakan array char dengan size default 30 untuk memudahkan.
 
-<br>
-Case Study ini meminta pengurutan (sorting) dan karena google boleh digunakan (makasih aslab tercinta), berikut algoritma sorting dari GeeksforGeeks. Bubblesort digunakan karena algoritmanya sederhana dan pada kasus ini karena jumlah darta sedikit kecepatan algoritma tidak terlalu penting.
+
+
+Case Study ini meminta pengurutan (sorting) dan karena google boleh digunakan (makasih aslab tercinta), berikut algoritma sorting dari GeeksforGeeks. [Bubblesort](https://youtu.be/xli_FI7CuzA?si=xyZX3mUe_N2o3ANe) digunakan karena algoritmanya sederhana dan pada kasus ini karena jumlah data sedikit, kecepatan algoritma tidak terlalu penting. Algoritma Bubble Sort sendiri tidak akan dibahas di sini.
+![Bubble sort](https://upload.wikimedia.org/wikipedia/commons/5/54/Sorting_bubblesort_anim.gif)
 
 ```c
 void swap(int *a, int *b)
@@ -50,29 +52,25 @@ void swap(int *a, int *b)
     *b = *a;
 }
 
-// An optimized version of Bubble Sort
 void bubbleSort(int arr[], int n)
 {
     int i, j;
-    bool swapped;
-    for (i = 0; i < n - 1; i++) {
-        swapped = false;
-        for (j = 0; j < n - i - 1; j++) {
-            if (&arr[j] > &arr[j + 1]) {
-                swap(arr[j], arr[j + 1]);
-                swapped = true;
+    for (i = 0; i < n - 1; i++) 
+    {
+        for (j = 0; j < n - i - 1; j++) 
+        {
+            if (arr[j] > arr[j + 1]) 
+            {
+                swap(&arr[j], &arr[j + 1]);
             }
         }
-        // If no two elements were swapped
-        // by inner loop, then break
-        if (swapped == false)
-            break;
     }
 }
 ```
 
-```Loh kan ini sorting buat integer?? Gimana caranya?```
-Tinggal diganti aja jadi menerim struct Servant kita tadi.
+```Loh kan ini sorting buat integer?? Mank bisa???```
+
+Ya tinggal diganti aja jadi menerima struct Servant kita tadi.
 ```c
 void swap(Servant *a, Servant *b)
 {
@@ -84,36 +82,61 @@ void swap(Servant *a, Servant *b)
 void bubbleSortServants(Servant arr[], int n) // Menerima struct Servant
 {
     int i, j;
-    bool swapped;
-    for (i = 0; i < n - 1; i++) {
-        swapped = false;
-        for (j = 0; j < n - i - 1; j++) {
-            if (&arr[j] > &arr[j + 1]) {
-                swap(arr[j], arr[j + 1]);
-                swapped = true;
+    for (i = 0; i < n - 1; i++) 
+    {
+        for (j = 0; j < n - i - 1; j++) 
+        {
+            if (arr[j] > arr[j + 1]) 
+            {
+                swap(&arr[j], &arr[j + 1]);
             }
         }
-        if (swapped == false)
-            break;
     }
 }
 ```
+```LOH MALAH ERROR??```<br>
+Dalam kasus ini Servant tidak  bisa dibandingkan, makanya akan error di bagian
+```c 
+...
+if (arr[j] > arr[j + 1]) {
+...
+```
+karena arr bertipe Servant, komputernya kebingungan bagian mana yang dibandingkan dari Servant, kita belum ngasih tahu secara spesifik apa yang mau dibandingkan.
 
-
-
-Hampir semua algoritma sorting terdapat satu bagian dari kodenya yang membandingkan konten array yang disortir, pada bagian itu hubungan data memengaruhi proses yang dijalankan algoritma selanjutnya (seperti swapping). Dalam kasus bubble sort, bagian itu terdapat pada bagian
-
-
+Solusinya sederhana, jika kita ingin membandingkan raritynya maka tinggal diberi .rarity untuk membandingkan data rarity di dalam struct tersebut.
 ```c
 ...
-if (&arr[j] > &arr[j + 1]) // Jika array pada j lebih besar dari j + 1,
+if (arr[j].rarity > arr[j + 1].rarity) // Jika array pada j lebih besar dari j + 1,
 {
-    swap(arr[j], arr[j + 1]); // maka tukar
+    swap(&arr[j], &arr[j + 1]); // maka tukar
     swapped = true;
 }
 ...
 ```
-yang merupakan kondisi penukaran utama.
+Hampir semua algoritma sorting memiliki satu bagian dari kodenya yang membandingkan konten array yang disortir, pada bagian itu hubungan data dalam array mempengaruhi proses yang dijalankan algoritma selanjutnya (seperti swapping).
+
+Dalam kasus bubble sort ini, kita bisa membayangkan bahwa jika data pada posisi j lebih besar dari j + 1, kita tukar. Hal ini dilakukan karena data pada j lebih besar dari j + 1 bukanlah posisi yang benar bagi sebuah array terurut dari kecil ke terbesar. 
+Karena kita ingin mengurutkan rarity servant dari yang terbesar ke terkecil, maka tinggal kita balik saja tandanya sehingga keseluruhan kode menjadi
+```c
+void bubbleSort(Servant *arr, int n)
+{
+    int i, j;
+    for (i = 0; i < n - 1; i++) 
+    {
+        for (j = 0; j < n - i - 1; j++) 
+        {
+            if (arr[j].rarity < arr[j + 1].rarity) // Jika rarity pada j lebih kecil dari j + 1
+            {
+                swap(&arr[j], &arr[j + 1]); // Tukar karena kita ingin terurut dari paling besar
+                swapped = true;
+            }
+        }
+    }
+}
+```
+
+Hore, nomor 1 sudah selesai 🎉🎉🎉.
+
 
 
 ```c
