@@ -1,4 +1,4 @@
-#CASE STUDY 3 - PEMROGRAMAN LANJUT
+# CASE STUDY 3 - PEMROGRAMAN LANJUT
 -----
 ## Soal 1 (60%)
 Pada suatu hari, Romani Archaman dari Chaldea Security Organization meminta anda untuk membantunya dalam masalah yang sedang ia hadapi. Ia meminta anda untuk membantunya dalam mengklasifikasikan servant dari Fate/Grand Order berdasarkan rarity-nya. Ia meminta anda untuk membuatkan sebuah program yang dapat mengklasifikasikan servant berdasarkan rarity-nya. Berikut ketentuannya:
