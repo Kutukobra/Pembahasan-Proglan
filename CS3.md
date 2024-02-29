@@ -39,7 +39,7 @@ typedef struct servant // Typedef agar dapat langsung dipanggil...
 ```
 Dalam kasus ini untuk string digunakan array char dengan size default 30 untuk memudahkan.
 
-
+##Nomor 1
 
 Case Study ini meminta pengurutan (sorting) dan karena google boleh digunakan (makasih aslab tercinta), berikut algoritma sorting dari GeeksforGeeks. [Bubblesort](https://youtu.be/xli_FI7CuzA?si=xyZX3mUe_N2o3ANe) digunakan karena algoritmanya sederhana dan pada kasus ini karena jumlah data sedikit, kecepatan algoritma tidak terlalu penting. Algoritma Bubble Sort sendiri tidak akan dibahas di sini.
 ![Bubble sort](https://upload.wikimedia.org/wikipedia/commons/5/54/Sorting_bubblesort_anim.gif)
@@ -49,7 +49,7 @@ void swap(int *a, int *b)
 {
     int temp = *a;
     *a = *b;
-    *b = *a;
+    *b = temp;
 }
 
 void bubbleSort(int arr[], int n)
@@ -76,7 +76,7 @@ void swap(Servant *a, Servant *b)
 {
     Servant temp = *a;
     *a = *b;
-    *b = *a;
+    *b = temp;
 }
 
 void bubbleSortServants(Servant arr[], int n) // Menerima struct Servant
@@ -109,7 +109,6 @@ Solusinya sederhana, jika kita ingin membandingkan raritynya maka tinggal diberi
 if (arr[j].rarity > arr[j + 1].rarity) // Jika array pada j lebih besar dari j + 1,
 {
     swap(&arr[j], &arr[j + 1]); // maka tukar
-    swapped = true;
 }
 ...
 ```
@@ -118,6 +117,23 @@ Hampir semua algoritma sorting memiliki satu bagian dari kodenya yang membanding
 Dalam kasus bubble sort ini, kita bisa membayangkan bahwa jika data pada posisi j lebih besar dari j + 1, kita tukar. Hal ini dilakukan karena data pada j lebih besar dari j + 1 bukanlah posisi yang benar bagi sebuah array terurut dari kecil ke terbesar. 
 Karena kita ingin mengurutkan rarity servant dari yang terbesar ke terkecil, maka tinggal kita balik saja tandanya sehingga keseluruhan kode menjadi
 ```c
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct servant
+{
+    char name[30];
+    char class[30];
+    int rarity;
+} Servant;
+
+void swap(Servant *a, Servant *b) // Fungsi penukar konten
+{
+    Servant temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
 void bubbleSort(Servant *arr, int n)
 {
     int i, j;
@@ -128,29 +144,175 @@ void bubbleSort(Servant *arr, int n)
             if (arr[j].rarity < arr[j + 1].rarity) // Jika rarity pada j lebih kecil dari j + 1
             {
                 swap(&arr[j], &arr[j + 1]); // Tukar karena kita ingin terurut dari paling besar
-                swapped = true;
+            }
+        }
+    }
+}
+
+void scanServants(Servant *servants, int n) // Fungsi untuk menginput array servant
+{
+    for (int i = 0; i < n; i++)
+    {
+        scanf(" %[^\n]s", servants[i].name);
+        scanf("%s", &servants[i].class);
+        scanf("%d", &servants[i].rarity);
+    }
+}
+
+void printServants(Servant *servants, int n) // Fungsi untuk mengoutput array servant
+{
+    printf("Name Class Rarity\n");
+    for (int i = 0; i < n; i++)
+    {
+        printf("%s ", servants[i].name);
+        printf("%s ", servants[i].class);
+        printf("%d\n", servants[i].rarity);
+    }
+}
+
+int main()
+{
+    int n; // Jumlah servant
+    scanf("%d", &n);
+    
+    Servant *servants = malloc(sizeof(Servant) * n); //  Alokasi dinamis array servant
+
+    scanServants(servants, n);
+
+    printf("Unsorted servants:\n"); // Print servant sebelum diurutkan
+    printServants(servants, n);
+
+    bubbleSort(servants, n); // Urutkan servant dari rarity terbesar
+
+    printf("\n");
+    printf("Sorted servants:\n"); // Print servant terurut
+    printServants(servants, n);
+    
+    return 0;
+}
+```
+
+Hore, nomor 1 sudah selesai 🎉.
+
+##Nomor 2
+Nomor 2 hanyalah ekstensi dari nomor 1, namun kali ini jika ada 2 Servant dengan rarity yang sama, diurutkan lagi berdasarkan namanya.
+Untuk mengurutkan nama, sebuah string, kita dapat menggunakan fungsi strcmp(char *a, char *b) dari library <string.h>.
+```c
+strcmp(const char *str1, const char *str2);
+```
+strcmp menerima 2 buah string (char array) dan akan menghasilkan output:
+```
+0                jika kedua string sama
+> 0 (positif)    jika str1 lebih "besar" dari str2
+< 0 (negatif)    jika str1 lebih "kecil" dari str2
+```
+
+maka dengan menggunakan pada bagian perbandingan di nomor 1
+```c
+...
+if (strcmp(arr[j].name, arr[j + 1].name) > 0) // Jika nama pada arr[j] lebih besar dari nama pada arr[j + 1]
+{
+    swap(&arr[j], &arr[j + 1]); // Tukar karena kita ingin terurut dari paling "kecil" (alfabetikal)
+}
+...
+```
+kita dapat mengurutkan array berdasarkan namanya.
+
+Masalahnya yang diminta soal nomor 2 itu mengurutkan berdasarkan nama JIKA rarity-nya sama. Kita bisa saja menggunakan if 2 kali seperti ini:
+```c
+void bubbleSort(Servant *arr, int n)
+{
+    int i, j;
+    for (i = 0; i < n - 1; i++) 
+    {
+        for (j = 0; j < n - i - 1; j++) 
+        {
+            if (arr[j].rarity == arr[j + 1].rarity) // Jika rarity pada j sama dengan j + 1
+            {
+                if (strcmp(arr[j].name, arr[j + 1].name) > 0) // Bandingkan stringnya
+                {
+                    swap(&arr[j], &arr[j + 1]); // Tukar karena kita ingin terurut dari paling "kecil" (alfabetikal)
+                }
+            }
+            else if (arr[j].rarity > arr[j + 1].rarity) // Jika ternyata tidak sama
+            {
+                swap(&arr[j], &arr[j + 1]); // Tukar berdasarkan rarity
             }
         }
     }
 }
 ```
+Solusi ini tidak salah, secara teknis nomor 2 sudah selesai, tapi cara seperti ini tidak efisien, tidak elegan, tidak cakep, jelek, buruk secara long term karena bayangin kalau persyaratannya lebih kompleks lagi, kita harus bikin if else lebih banyak lagi. 
 
-Hore, nomor 1 sudah selesai 🎉🎉🎉.
+Solusi yang dapat digunakan untuk permasalahan ini adalah dengan menggunakan fungsi terpisah. 
+```c
+int fungsi_perbandingan(Servant a, Servant b)
+{
+    if (a.rarity == b.rarity) // Jika rarity sama
+    {
+        return strcmp(a.name, b.name) < 0; // Mengembalikan 0 jika hasil nama a lebih besar dari b dan 1 jika a lebih kecil
+    }
+    else
+    {
+        return a.rarity > b.rarity; // Mengembalikan 0 jika rarity a lebih kecil dari b dan 1 jika lebih besar
+    }
+}
 
-
-
+void bubbleSort(Servant *arr, int n)
+{
+    int i, j;
+    for (i = 0; i < n - 1; i++) 
+    {
+        for (j = 0; j < n - i - 1; j++) 
+        {
+            if (fungsi_perbandingan(arr[j], arr[j + 1]) == 0) // Jika fungsi pengecek menghasilkan 0 (kondisi belum terpenuhi)
+            {
+                swap(&arr[j], &arr[j + 1]); // Tukar
+            }
+        }
+    }
+}
+```
+fungsi_perbandingan() mengembalikan 0 jika kondisi urutan array belum sesuai keinginan. Bahasa lebih manusiawinya begini:
+```c
+int fungsi_perbandingan(Servant a, Servant b)
+{
+    if (a.rarity == b.rarity) // Jika rarity sama
+    {
+        if (strcmp(a.name, b.name) < 0);
+        {
+            return 1;
+        } 
+        else
+        {
+            return 0;
+        }
+    }
+    else
+    {
+        if (a.rarity > b.rarity)
+        {
+            return 1;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+}
+```
+Kode komplit untuk nomor 2:
 ```c
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-typedef enum bool
+typedef struct servant
 {
-    false,
-    true
-} bool;
-
-
+    char name[30];
+    char class[30];
+    int rarity;
+} Servant;
 
 void swap(Servant *a, Servant *b)
 {
@@ -159,39 +321,224 @@ void swap(Servant *a, Servant *b)
     *b = temp;
 }
 
-bool compRarity(Servant a, Servant b)
+int fungsi_perbandingan(Servant a, Servant b)
+{
+    if (a.rarity == b.rarity) // Jika rarity sama
+    {
+        return strcmp(a.name, b.name) < 0; // Mengembalikan 0 jika hasil nama a lebih besar dari b dan 1 jika a lebih kecil
+    }
+    else
+    {
+        return a.rarity > b.rarity; // Mengembalikan 0 jika rarity a lebih kecil dari b dan 1 jika lebih besar
+    }
+}
+
+void bubbleSort(Servant *arr, int n)
+{
+    int i, j;
+    for (i = 0; i < n - 1; i++) 
+    {
+        for (j = 0; j < n - i - 1; j++) 
+        {
+            if (fungsi_perbandingan(arr[j], arr[j + 1]) == 0) // Jika fungsi pengecek menghasilkan 0 (kondisi belum terpenuhi)
+            {
+                swap(&arr[j], &arr[j + 1]); // Tukar
+            }
+        }
+    }
+}
+
+void scanServants(Servant *servants, int n) // Fungsi untuk menginput array servant
+{
+    for (int i = 0; i < n; i++)
+    {
+        scanf(" %[^\n]s", servants[i].name);
+        scanf("%s", &servants[i].class);
+        scanf("%d", &servants[i].rarity);
+    }
+}
+
+void printServants(Servant *servants, int n) // Fungsi untuk mengoutput array servant
+{
+    printf("Name Class Rarity\n");
+    for (int i = 0; i < n; i++)
+    {
+        printf("%s ", servants[i].name);
+        printf("%s ", servants[i].class);
+        printf("%d\n", servants[i].rarity);
+    }
+}
+
+int main()
+{
+    int n; // Jumlah servant
+    scanf("%d", &n);
+    
+    Servant *servants = malloc(sizeof(Servant) * n); //  Alokasi dinamis array servant
+
+    scanServants(servants, n);
+
+    printf("Unsorted servants:\n");
+    printServants(servants, n);
+
+    bubbleSort(servants, n);
+    printf("\n");
+    printf("Sorted servants:\n");
+    printServants(servants, n);
+    
+    return 0;
+}
+```
+Hore, nomor 2 selesai juga 🎉🎉.
+
+##Nomor 3
+Untuk nomor 3, kali ini pengguna program dapat memilih untuk melakukan sorting berdasarkan rarity, nama, atau class. Kita bisa saja membuat fungsi bubblesort yang berbeda-beda untuk setiap kondisi, tapi kalau begitu caranya tidak efektif karena sebenarnya algoritmanya sama semua, kondisinya saja yang beda. 
+
+```Di nomor 2 tadi kita misahin kondisi penentu ke fungsi terpisah, kira-kira bisa nggak itu aja yang berubah???```
+
+BISA BANGET, ayo kenalan sama ✨function pointer✨.
+
+Misalkan ada sebuah fungsi A yang di dalamnya memanggil fungsi lain, kita bisa mengubah-ubah fungsi yang dipanggil di dalam A dengan menggunakan function pointer.
+```c
+void fungsiB()
+{
+    printf("Alex IPK 4\n");
+}
+
+void fungsiC()
+{
+    printf("Nadzhif bau ketek\n");
+}
+
+void fungsiA(void (*fungsiLain)()) // fungsiA menerima pointer dari sebuah fungsi void
+{
+    printf("Fungsi: "); // Kelakuannya fungsiA
+    fungsiLain();   // Memanggil fungsi lain yang dioper
+}
+
+int main()
+{
+    fungsiA(&fungsiB); // Memasukan pointer dari fungsiB ke dalam fungsiA
+    /*
+        Output: Fungsi: Alex IPK 4
+    */
+
+    fungsiA(&fungsiC); // Memasukan pointer dari fungsiC ke dalam fungsiA
+    /*
+        Output: Fungsi: Nadzhif bau ketek
+    */
+}
+```
+
+Dengan begini, kita bisa menggunakan fungsi-fungsi berbeda sebagai fungsi perbandingan dalam fungsi sorting.
+```c
+// Fungsi-fungsi pembanding
+int urutkanRarity(Servant a, Servant b) // Bandingkan berdasarkan rarity, sama seperti nomor 2
 {
     if (a.rarity == b.rarity)
     {
         return (strcmp(a.name, b.name) < 0);
     }
-    return a.rarity > b.rarity;
+    else
+    {
+        return a.rarity > b.rarity;
+    }
 }
 
-bool compName(Servant a, Servant b)
+int urutkanName(Servant a, Servant b) // Bandingankan berdasarkan nama
 {
-    return (strcmp(a.name, b.name) < 0);
+    if (strcmp(a.name, b.name) == 0) // Jika nama sama, bandingkan berdasarkan rarity
+    {
+        return (a.rarity > b.rarity);
+    }
+    else
+    {
+        return (strcmp(a.name, b.name) < 0); // Mengembalikan 0 jika nama a lebih "besar" dari nama b
+    }
 }
 
-bool compClass(Servant a, Servant b)
+int urutkanClass(Servant a, Servant b) // Bandingankan berdasarkan nama
 {
-    return strcmp(a.class, b.class) < 0;
+    if (strcmp(a.class, b.class) == 0) // Jika class sama, bandingkan berdasarkan rarity
+    {
+        return (a.rarity > b.rarity);
+    }
+    else
+    {
+        return (strcmp(a.class, b.class) < 0); // Mengembalikan 0 jika class a lebih "besar" dari class b
+    }
+}
+```
+
+Dengan begini, nomor 3 dapat diselesaikan dengan function pointer serta switch case untuk memilihnya.
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+typedef struct servant
+{
+    char name[30];
+    char class[30];
+    int rarity;
+} Servant;
+
+void swap(Servant *a, Servant *b)
+{
+    Servant temp = *a;
+    *a = *b;
+    *b = temp;
 }
 
-void bubbleSort(Servant *arr, int n, bool (*comp)(Servant, Servant))
+int urutkanRarity(Servant a, Servant b) // Bandingkan berdasarkan rarity, sama seperti nomor 2
+{
+    if (a.rarity == b.rarity)
+    {
+        return (strcmp(a.name, b.name) < 0);
+    }
+    else
+    {
+        return a.rarity > b.rarity;
+    }
+}
+
+int urutkanName(Servant a, Servant b) // Bandingankan berdasarkan nama
+{
+    if (strcmp(a.name, b.name) == 0) // Jika nama sama, bandingkan berdasarkan rarity
+    {
+        return (a.rarity > b.rarity);
+    }
+    else
+    {
+        return (strcmp(a.name, b.name) < 0); // Mengembalikan 0 jika nama a lebih "besar" dari nama b
+    }
+}
+
+int urutkanClass(Servant a, Servant b) // Bandingankan berdasarkan nama
+{
+    if (strcmp(a.class, b.class) == 0) // Jika class sama, bandingkan berdasarkan rarity
+    {
+        return (a.rarity > b.rarity);
+    }
+    else
+    {
+        return (strcmp(a.class, b.class) < 0); // Mengembalikan 0 jika class a lebih "besar" dari class b
+    }
+}
+
+void bubbleSort(Servant *arr, int n, int (*fungsi_perbandingan)(Servant, Servant)) // Bubblesort menerima fungsi int yang menerima 2 buah parameter Servant
 {
     int i, j;
-    bool swapped;
-    for (i = 0; i < n - 1; i++) {
-        swapped = false;
-        for (j = 0; j < n - i - 1; j++) {
-            if (!comp(arr[j], arr[j + 1])) {
-                swap(&arr[j], &arr[j + 1]);
-                swapped = true;
+    for (i = 0; i < n - 1; i++) 
+    {
+        for (j = 0; j < n - i - 1; j++) 
+        {
+            if (fungsi_perbandingan(arr[j], arr[j + 1]) == 0) // Jika fungsi perbandingan mengembalikan 0 (kondisi terurut belum terpenuhi)
+            {
+                swap(&arr[j], &arr[j + 1]); // Tukar
             }
         }
-        if (swapped == false)
-            break;
     }
 }
 
@@ -207,6 +554,7 @@ void scanServants(Servant *servants, int n)
 
 void printServants(Servant *servants, int n)
 {
+    printf("Name Class Rarity\n");
     for (int i = 0; i < n; i++)
     {
         printf("%s ", servants[i].name);
@@ -221,21 +569,11 @@ int main()
     scanf("%d", &n);
 
     Servant *servants = malloc(sizeof(Servant) * n);
-    Servant *sort_servants = malloc(sizeof(Servant) * n);
     
     scanServants(servants, n);
 
-    for (int i = 0; i < n; i++)
-    {
-        sort_servants[i] = servants[i];
-    }
-
-
-
     printf("Unsorted servants:\n");
-    printf("Name Class Rarity\n");
     printServants(servants, n);
-    putchar('\n');
 
     printf("Choose the sorting mode: \n");
     printf("1. Sort by rarity: \n");
@@ -248,26 +586,37 @@ int main()
     switch (option)
     {
         case 1:
-            bubbleSort(sort_servants, n, compRarity);
+            bubbleSort(servants, n, &urutkanRarity);
             break;
         
         case 2:
-            bubbleSort(sort_servants, n, compName);
+            bubbleSort(servants, n, &urutkanName);
             break;
         
         case 3:
-            bubbleSort(sort_servants, n, compClass);
+            bubbleSort(servants, n, &urutkanClass);
             break;
     }
 
     
-    putchar('\n');
+    printf("\n");
     printf("Sorted servants:\n");
-    printf("Name Class Rarity\n");
-    printServants(sort_servants, n);
+    printServants(servants, n);
 
     return 0;
 }
-``
+```
+SELESAI SEMUA HORE 🎉🎉🎉
 
 
+Makasih ya udah mau baca, kalo lu baca semua sampe sini berarti lu punya kemauan untuk belajar dan gua apresiasi itu. 
+
+Orang bodoh itu bukan mereka yang belum mampu, tapi mereka yang tidak mau belajar dan berubah. Jadi just go for it 💪💪💪
+
+
+Kritik dan saran saya terima.
+
+Bikin pembahasan >>> duduk di lantai sampe tengah malem 
+
+------
+Muhammad Nadzhif Fikri, 29  Februari 2024
