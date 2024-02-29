@@ -37,11 +37,10 @@ typedef struct servant // Typedef agar dapat langsung dipanggil...
     int rarity;
 } Servant; // ...sebagai servant
 ```
-Dalam kasus ini untuk string digunakan array char dengan size default 30 untuk memudahkan.
 
 ## Nomor 1
 
-Case Study ini meminta pengurutan (sorting) dan karena google boleh digunakan (makasih aslab tercinta), berikut algoritma sorting dari GeeksforGeeks. [Bubblesort](https://youtu.be/xli_FI7CuzA?si=xyZX3mUe_N2o3ANe) digunakan karena algoritmanya sederhana dan pada kasus ini karena jumlah data sedikit, kecepatan algoritma tidak terlalu penting. Algoritma Bubble Sort sendiri tidak akan dibahas di sini.
+Case Study ini meminta pengurutan (sorting) dan karena google boleh digunakan (makasih aslab tercinta). [Bubblesort](https://youtu.be/xli_FI7CuzA?si=xyZX3mUe_N2o3ANe) digunakan karena algoritmanya sederhana dan pada kasus ini karena jumlah data sedikit, kecepatan algoritma tidak terlalu penting. Algoritma Bubble Sort sendiri tidak akan dibahas di sini.
 
 ![Bubble sort](https://upload.wikimedia.org/wikipedia/commons/5/54/Sorting_bubblesort_anim.gif)
 
