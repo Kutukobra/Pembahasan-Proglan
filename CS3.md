@@ -27,7 +27,7 @@ Setelah selesai membantu Romani Archaman, anda kembali ke kantor untuk melanjutk
 
 -------------------------
 
-#Pembahasan:
+# Pembahasan:
 Diketahui bahwa dalam soal ini ada klasifikasi karakter wibu yang terdiri atas integer rarity, string nama, dan string class. Untuk memudahkan proses, sebuah struct dapat digunakan sebagai tipe data Servant.
 ```c
 typedef struct servant // Typedef agar dapat langsung dipanggil...
@@ -623,7 +623,7 @@ Orang bodoh itu bukan mereka yang belum mampu, tapi mereka yang tidak mau belaja
 
 Kritik dan saran saya terima.
 
-Bikin pembahasan >>> duduk di lantai sampe tengah malem 
+<font size="1"> bikin pembahasan buat angkatan >>> begadang bareng di lantai kampus</font>
 
 ------
 Muhammad Nadzhif Fikri, 29  Februari 2024
