@@ -9,10 +9,20 @@ typedef struct Pelamar
     float IPK;
 } Pelamar;
 
+float scanFloatRange(float minimum, float maximum)
+{
+    float ret;
+    do 
+    {
+        scanf("%f", &ret);
+    } while ((ret) < minimum || (ret) > maximum);
+    return ret;
+}
+
 void scanPelamar(Pelamar *pelamar)
 {
     scanf(" %[^\n]", pelamar->nama);
-    scanf("%f", &pelamar->IPK);
+    pelamar->IPK = scanFloatRange(0, 4);
 }
 
 void printPelamar(const Pelamar *pelamar)
@@ -59,7 +69,7 @@ void findPrintNama(const Pelamar* pelamar_array, const int n, const char* target
 {
     for (int i = 0; i < n; i++)
     {
-        if (strstr(pelamar_array[i].nama, target))
+        if (strcasestr(pelamar_array[i].nama, target))
         {
             printPelamar(&pelamar_array[i]);
         }
@@ -76,7 +86,8 @@ int main()
         float IPK;
     } target;
 
-    scanf("%d", &N);
+    N = scanFloatRange(2, 100);
+    
     Pelamar *pelamar_array = (Pelamar*)malloc(sizeof(Pelamar) * N);
     
     for (int i = 0; i < N; i++)
@@ -96,14 +107,11 @@ int main()
         break;
     
     case 2:
-        scanf("%f", &target.IPK);
+        target.IPK = scanFloatRange(0, 4);
         findPrintIPK(pelamar_array, N, target.IPK);
         break;
     }
-    char *test = malloc(300);
-    scanf("%300s", test);
-    printf(test);
-
+    
     free(pelamar_array);
     return 0;
 }
