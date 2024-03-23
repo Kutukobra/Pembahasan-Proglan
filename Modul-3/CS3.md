@@ -19,9 +19,8 @@ Setelah selesai membantu Romani Archaman, anda kembali ke kantor untuk melanjutk
 -------------------------
 
 <font size="5">
-"Fairy tales are more than true: not because they tell us that dragons exist,
- but because they tell us that dragons can be beaten." 
- <br>- G.K. Chesterton
+“Failure is only the opportunity to begin again. Only this time, more wisely.” 
+    <br>- Uncle Iroh, from Avatar The Last Airbender
 </font>
 
 -------------------------
