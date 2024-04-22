@@ -42,3 +42,19 @@ Pada praktikum kali ini, kita akan membuat sebuah local multiplier game:
 
 # Pembahasan:
 
+## Bagian 1: THE Game
+
+Dalam CS kali ini, kita membuat sebuah game. Secara gameplay, gamenya sendiri sederhana:
+
+1. Terdapat sebuah urutan pemain dengan skor awal 0.
+2. Setiap pemain menulis angka urutannya, atau "Boom" jika angka urutannya kelipatan 3.
+3. Jika seorang pemain salah menyebut, permainan selesai dan pemain tersebut dipindahkan ke urutan terakhir pada permainan selanjutnya.
+4. Setiap pemain yang menyebutkan benar, skornya +1, jika salah skornya -1, dan jika tidak dapat kesempatan sama sekali (karena ada pemain salah sebelum dia), maka skor tidak berubah.
+5. Permainan hanya dapat dimulai dengan minimum jumlah pemain 5.
+
+![Game Linked List Illustration](Images/LinkedListGame.jpg)
+
+`Jir bro gini mah gua juga ngerti, implementasinya gimana???`
+
+## Bagian 2: Implementasi
+
