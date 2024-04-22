@@ -58,3 +58,42 @@ Dalam CS kali ini, kita membuat sebuah game. Secara gameplay, gamenya sendiri se
 
 ## Bagian 2: Implementasi
 
+Dalam sebuah program, tidak mungkin diciptakan lingkaran dan panah seperti di gambar sebagai representasi, namun #Alhamdulillah bisa direpresentasikan dengan cara lain.
+
+Sebuah linked list didefinisikan dengan Node (bulet-bulet) yang mengandung data dan bagaimana mereka terhubung (linked) dengan satu sama lain. Hubungan antar node direpresentasikan menggunakan pointer.
+
+Pointer, sesuai dengan namanya, "menunjuk" ke sebuah data. Dalam kasus ini, setiap Node memiliki pointer yang "menunjuk" ke Node lain. Dalam sebuah linked list, Node tersebut menunjuk ke Node selanjutnya yang dapat menunjuk lagi ke Node lainnnya sehingga terbentuklah sebuah rantai data.
+
+Misalkan sebuah linked list yang mengandung data bertipe integer, maka Node dapat dibuat dengan `struct` sebagai berikut:
+
+```c
+typedef struct Node Node; // Prototype struct Node terlebih dahulu agar
+                          // dapat digunakan di dalam dirinya sendiri. Typedef untuk kemudahan
+
+struct Node
+{
+    int data; // Data yang disimpan.
+    Node *next; // Pointer yang menyimpan Node lanjutannya.
+};
+```
+
+Salah satu keuntungan dari menggunakan linked list adalah sifatnya yang menggunakan memori dinamis (`malloc` dkk) sehingga ukuran dan jumlahnya fleksibel pada _runtime_. Namun karena cara kerja malloc sendiri, isi dari struct yang diciptakannya sering mengandung data acak. Untuk kendali lebih terhadap penciptaannya, dapat dibuat sebuah fungsi yang mengembalikan pointer berisi sebuah Node.
+
+```c
+Node *Node_Init(int data)
+{
+    Node *temp = malloc(sizeof(Node)); // Mengalokasikan memori dinamis sebesar sebuah struct Node
+
+    temp->data = data;      // Mengisi data sesuai dengan argumen fungsi.
+    temp->next = NULL;      // Memastikan Node selanjutnya NULL (kosong) di awal.
+
+    return temp;            // Mengembalikan pointer yang telah diisi.
+}
+```
+
+Dengan begini, misalkan ingin dibuat sebuah Node dengan isi data 5, fungsi `Node_Init()` dapat dipanggil.
+
+```c
+Node *node_5 = Node_Init(5);
+// Pointer node_5 menunjuk (berisi) ke sebuah Node dengan data 5.
+```
